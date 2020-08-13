@@ -8,7 +8,6 @@ const incidentsController = {
         const [count] = await connection('incidents').count();
         res.header('pages', count['count(*)']);
         try {
-            console.log(count['count(*)'])
             const incidents = await connection('incidents')
                 .join('ongs', 'ong_id', '=', 'incidents.ong_id')
                 .limit(5)
@@ -25,10 +24,6 @@ const incidentsController = {
         }
     },
     create: async (req, res) => {
-        // "title":"Aula de Banco de Dados",
-        // "description":"Voluntários para aulas de BD avançado",
-        // "value":4.25,
-        // "ong_id":"8b25eb3f"
         const {
             title,
             description,
@@ -42,26 +37,19 @@ const incidentsController = {
                 value,
                 ong_id
             })
-
-            console.log(req.headers.authorization)
             return res.status(201).json(incidents);
-
         } catch (error) {
             console.log(error)
             return res.status(400).json(error);
         }
     },
-
     delete: async (req, res) => {
         const {
             id
         } = req.params
         const ong_id = req.headers.authorization
-        console.log(ong_id)
         try {
             const incident = await connection('incidents').where('id', id).select('ong_id').first()
-
-            console.log(incident.ong_id)
             if (incident.ong_id != ong_id) {
                 return res.status(401).json({
                     status: "Não Autorizado"
@@ -75,7 +63,6 @@ const incidentsController = {
         } catch (error) {
             return res.status(400).json(error);
         }
-
     }
 }
 

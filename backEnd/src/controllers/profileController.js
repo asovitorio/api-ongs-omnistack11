@@ -4,7 +4,6 @@ index: async (req,res) =>{
     const ong_id = req.headers.authorization;
     try {
         const incident = await connection('incidents').where('ong_id',ong_id).select('*');
-        console.log(incident)
         return res.status(200).json(incident)
     } catch (error) {
         return res.status(400).json(error)
